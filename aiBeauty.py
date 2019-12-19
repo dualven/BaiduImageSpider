@@ -9,10 +9,16 @@ import urllib.request
 from urllib import parse
 from mytoken import GetToken
 import operator
+import time
+import upload2Fdfs as up
  
 faceDetectUrl = "https://aip.baidubce.com/rest/2.0/face/v3/detect"
+class highPic:
+    yanzhi=0;
+    pic='';
+
 # 根据人脸检测的颜值打分，判断是否下载
-def IfDownLoad(pic, token):
+def IfDownLoad(pic, token,best):
     img = base64.b64encode(pic)
     print(token);
     params = {"image_type":"BASE64","face_field":"age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities","image":img }
@@ -32,19 +38,30 @@ def IfDownLoad(pic, token):
             print ("age: %d, beauty: %d" % (item['age'], item['beauty']));
             if 0 == operator.eq('female', item['gender']):
                 if (item['age']<29)and(item['beauty']>55):      # 只下载女孩，年龄小于 29，颜值大于 55分
-                    return True
+                    if(item['beauty']>best.yanzhi):
+                      best.pic=pic;
+                      best.yanzhi=item['beauty'];
+                      return False;
+                    else:
+                      return True
     return False
  
-def DownLoad(url, i):
+def DownLoad(url, i,group,tag):
     fp = open("pic/%d.jpg"%i, "wb+")
     fp.write(url)
+    up.uploadBeauty( "pic/%d.jpg"%i,group,tag,0)
     fp.close()
- 
+def DownLoadBest(content,i,group,tag):
+    fp = open("pic/%d.jpg"%i,"wb+")
+    fp.write(content)
+    up.uploadBeauty( "pic/%d.jpg"%i ,group,tag,1)
+    fp.close() 
  
  
 if __name__ == "__main__":
     # 获取网页源代码
-    word="张天爱";
+    group="我最爱"
+    word="吴倩";
     url = 'http://image.baidu.com/search/flip?tn=baiduimage&ie=utf-8&word=' + word + '&pn=';
     data = requests.get(url)
 #    print (data.content)
@@ -53,17 +70,21 @@ if __name__ == "__main__":
     pattern = re.compile(r'.*?"objURL":"(.*?)",', re.S)
     result = pattern.findall(data.content.decode('utf-8'));
     i = 0
+    best= highPic();
+    
     token = GetToken()['access_token'];
     for item in result:
         print (item)
+        time.sleep(2);
         try:
             pic = requests.get(item, timeout=10)
-            if(True == IfDownLoad(pic.content, token)):
-                DownLoad(pic.content, i)
+            if(True == IfDownLoad(pic.content, token,best)):
+                DownLoad(pic.content, i,group,word)
                 i = i + 1
                 print(i);
         except Exception as e:
            print(e);
-#        break;
+        #break;
+    DownLoadBest(best.pic,best.yanzhi,group ,word);
     print("the end");
  

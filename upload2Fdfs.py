@@ -21,14 +21,14 @@ def uploadlocal2(picpath):
     data ={ 'thumbImage':'true'} 
     req = requests.post( url,files=files,data=data)
     print(req.text)
-def uploadBeauty(picpath,group,tag):
+def uploadBeauty(picpath,group,tag,author):
     files = {'file':open(picpath, 'rb')}
     headers = {"content-type": "multipart/form-data"}
     url = 'http://10.60.2.175:28091/file/uploadBeauty'
-    data ={ 'thumbImage':'true','group':group,'tag':tag}
+    data ={ 'thumbImage':'true','group':group,'tag':tag,'author':author}
     req = requests.post( url,files=files,data=data)
     print(req.text)
 if __name__ == '__main__':
 #   uploadlocal('/home/fdfs_data/111/9.jpeg')
 #   uploadlocal2('/home/python/BaiduImageSpider/111/9.jpeg')
-    uploadBeauty('/home/python/BaiduImageSpider/111/9.jpeg','2','girl')
+    uploadBeauty('/home/python/BaiduImageSpider/111/9.jpeg','5','girl','1')
