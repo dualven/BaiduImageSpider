@@ -11,6 +11,7 @@ from mytoken import GetToken
 import operator
 import time
 import upload2Fdfs as up
+import sys
  
 faceDetectUrl = "https://aip.baidubce.com/rest/2.0/face/v3/detect"
 class highPic:
@@ -21,7 +22,7 @@ class highPic:
 def IfDownLoad(pic, token,best):
     img = base64.b64encode(pic)
     print(token);
-    params = {"image_type":"BASE64","face_field":"age,beauty,expression,faceshape,gender,glasses,landmark,race,qualities","image":img }
+    params = {"image_type":"BASE64","face_field":"age,beauty,expression,faceshape,gender,glasses,landmark,race,quality","image":img }
     params = parse.urlencode(params).encode("utf-8");
     request_url = faceDetectUrl + "?access_token=" + token
     print(request_url)
@@ -41,6 +42,9 @@ def IfDownLoad(pic, token,best):
                     if(item['beauty']>best.yanzhi):
                       best.pic=pic;
                       best.yanzhi=item['beauty'];
+                      return False;
+                    elif(item['quality']['blur'] > 0 ):
+                      print('blur is not 0');
                       return False;
                     else:
                       return True
@@ -62,6 +66,10 @@ if __name__ == "__main__":
     # 获取网页源代码
     group="我最爱"
     word="吴倩";
+    if(len(sys.argv) >2 ):
+       group=sys.argv[1];
+       word=sys.argv[2];
+
     url = 'http://image.baidu.com/search/flip?tn=baiduimage&ie=utf-8&word=' + word + '&pn=';
     data = requests.get(url)
 #    print (data.content)

@@ -19,4 +19,11 @@ python index.py
 [爬虫总结](http://www.jwlchina.cn/2016/02/06/python%E7%99%BE%E5%BA%A6%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB/)
 
 效果图：
-![效果图](http://www.jwlchina.cn/uploads/python%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB%E6%88%AA%E5%9B%BE.png)
+!
+
+4[效果图](http://www.jwlchina.cn/uploads/python%E5%9B%BE%E7%89%87%E7%88%AC%E8%99%AB%E6%88%AA%E5%9B%BE.png)
+
+
+duanxiongwen add
+1)beautyindex.py 是一个简单的模仿
+2）beautyAi.py是使用了百度的AI，且在使用方面很便捷，直接在命令行敲，python beau**  group tag就可以正确入库。 
